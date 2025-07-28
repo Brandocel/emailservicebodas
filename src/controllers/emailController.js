@@ -26,12 +26,12 @@ class EmailController {
       const result = await emailService.sendRsvpConfirmation(data);
 
       if (result.success) {
-        // Solo imprimimos en consola los correos usados
+        // Imprimir en consola todos los destinatarios incluidos los dos de notificación
         console.log(
           '🔔 Notificación enviada a:',
-          data.emailRemitente,
-          ',',
-          process.env.NOTIFICATION_EMAIL
+          data.emailRemitente, ',',
+          process.env.NOTIFICATION_EMAIL, ',',
+          process.env.NOTIFICATION_EMAIL2
         );
 
         return res.status(200).json(
@@ -39,7 +39,11 @@ class EmailController {
             'Confirmación enviada exitosamente',
             {
               messageId: result.messageId,
-              recipients: [data.emailRemitente, process.env.NOTIFICATION_EMAIL],
+              recipients: [
+                data.emailRemitente,
+                process.env.NOTIFICATION_EMAIL,
+                process.env.NOTIFICATION_EMAIL2
+              ],
               timestamp: new Date().toISOString()
             }
           )
@@ -121,10 +125,7 @@ class EmailController {
         agregarAcompañantes: true,
         mismoPlato: false,
         acompañantes: [
-          {
-            nombre: 'Acompañante de Prueba',
-            platillo: 'pasta'
-          }
+          { nombre: 'Acompañante de Prueba', platillo: 'pasta' }
         ],
         alergias: 'Sin alergias conocidas'
       };
@@ -132,12 +133,12 @@ class EmailController {
       const result = await emailService.sendRsvpConfirmation(testData);
 
       if (result.success) {
-        // Log de destinatarios de prueba
+        // Imprimir en consola todos los destinatarios de prueba
         console.log(
           '🔔 Notificación de prueba enviada a:',
-          email,
-          ',',
-          process.env.NOTIFICATION_EMAIL
+          email, ',',
+          process.env.NOTIFICATION_EMAIL, ',',
+          process.env.NOTIFICATION_EMAIL2
         );
 
         return res.status(200).json(
@@ -145,7 +146,11 @@ class EmailController {
             'Email de prueba enviado exitosamente',
             {
               messageId: result.messageId,
-              recipients: [email, process.env.NOTIFICATION_EMAIL],
+              recipients: [
+                email,
+                process.env.NOTIFICATION_EMAIL,
+                process.env.NOTIFICATION_EMAIL2
+              ],
               timestamp: new Date().toISOString()
             }
           )
