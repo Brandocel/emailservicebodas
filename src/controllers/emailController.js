@@ -1,10 +1,11 @@
+require('dotenv').config();
 const emailService = require('../services/emailService');
 const { validateRsvpData } = require('../models/rsvpModel');
 const { createSuccessResponse, createErrorResponse } = require('../utils/responseHelper');
 
 class EmailController {
   /**
-   * Envía confirmación de RSVP
+   * Envía confirmación de RSVP e imprime en consola los destinatarios
    */
   async sendRsvpConfirmation(req, res) {
     try {
@@ -13,10 +14,8 @@ class EmailController {
       
       // Validar datos de entrada
       const { isValid, errors, data } = validateRsvpData(req.body);
-      
-      // Debug: Log del resultado de validación
-      console.log('✅ Resultado de validación:', { isValid, errors, data: data ? JSON.stringify(data, null, 2) : null });
-      
+      console.log('✅ Resultado de validación:', { isValid, errors });
+
       if (!isValid) {
         return res.status(400).json(
           createErrorResponse('Datos de validación incorrectos', errors, 'VALIDATION_ERROR')
@@ -27,12 +26,20 @@ class EmailController {
       const result = await emailService.sendRsvpConfirmation(data);
 
       if (result.success) {
+        // Solo imprimimos en consola los correos usados
+        console.log(
+          '🔔 Notificación enviada a:',
+          data.emailRemitente,
+          ',',
+          process.env.NOTIFICATION_EMAIL
+        );
+
         return res.status(200).json(
           createSuccessResponse(
             'Confirmación enviada exitosamente',
             {
               messageId: result.messageId,
-              recipient: data.emailRemitente,
+              recipients: [data.emailRemitente, process.env.NOTIFICATION_EMAIL],
               timestamp: new Date().toISOString()
             }
           )
@@ -46,9 +53,8 @@ class EmailController {
           )
         );
       }
-
     } catch (error) {
-      console.error('Error en sendRsvpConfirmation:', error);
+      console.error('❌ Error en sendRsvpConfirmation:', error);
       return res.status(500).json(
         createErrorResponse(
           'Error interno del servidor',
@@ -65,7 +71,6 @@ class EmailController {
   async checkEmailServiceStatus(req, res) {
     try {
       const status = await emailService.validateConfiguration();
-      
       if (status.valid) {
         return res.status(200).json(
           createSuccessResponse('Servicio de email funcionando correctamente', {
@@ -82,9 +87,8 @@ class EmailController {
           )
         );
       }
-
     } catch (error) {
-      console.error('Error verificando servicio de email:', error);
+      console.error('❌ Error verificando servicio de email:', error);
       return res.status(500).json(
         createErrorResponse(
           'Error verificando servicio',
@@ -96,12 +100,12 @@ class EmailController {
   }
 
   /**
-   * Endpoint de prueba para desarrolladores
+   * Endpoint de prueba para desarrolladores:
+   * envía un RSVP de prueba e imprime destinatarios
    */
   async sendTestEmail(req, res) {
     try {
       const { email } = req.body;
-      
       if (!email) {
         return res.status(400).json(
           createErrorResponse('Email requerido', 'Debes proporcionar un email para la prueba', 'MISSING_EMAIL')
@@ -128,12 +132,20 @@ class EmailController {
       const result = await emailService.sendRsvpConfirmation(testData);
 
       if (result.success) {
+        // Log de destinatarios de prueba
+        console.log(
+          '🔔 Notificación de prueba enviada a:',
+          email,
+          ',',
+          process.env.NOTIFICATION_EMAIL
+        );
+
         return res.status(200).json(
           createSuccessResponse(
             'Email de prueba enviado exitosamente',
             {
               messageId: result.messageId,
-              recipient: email,
+              recipients: [email, process.env.NOTIFICATION_EMAIL],
               timestamp: new Date().toISOString()
             }
           )
@@ -147,9 +159,8 @@ class EmailController {
           )
         );
       }
-
     } catch (error) {
-      console.error('Error en sendTestEmail:', error);
+      console.error('❌ Error en sendTestEmail:', error);
       return res.status(500).json(
         createErrorResponse(
           'Error interno del servidor',
