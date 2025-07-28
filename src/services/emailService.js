@@ -95,10 +95,10 @@ class EmailService {
         <div style="background-color: #E8F5E8; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
           <h3 style="color: #2E7D32; text-align: center; margin-bottom: 15px;">📅 Información del Evento</h3>
           <div style="text-align: center;">
-            <p><strong>Fecha:</strong> [Fecha de la boda]</p>
-            <p><strong>Hora:</strong> [Hora del evento]</p>
-            <p><strong>Lugar:</strong> [Ubicación del evento]</p>
-            <p><strong>Dirección:</strong> [Dirección completa]</p>
+            <p><strong>Fecha:</strong> 25 de Octubre</p>
+            <p><strong>Hora:</strong> 4:00 PM</p>
+            <p><strong>Lugar:</strong> Iglesia Santa María de las Cumbres</p>
+            <p><strong>Dirección:</strong> Martha Chávez Padrón, 77560 Alfredo V.Bonfil, Q.R.</p>
           </div>
         </div>
 
