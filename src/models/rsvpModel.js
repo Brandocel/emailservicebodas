@@ -4,7 +4,7 @@ const rsvpValidationSchema = Joi.object({
   // Datos del invitado principal
   nombre: Joi.string()
     .min(2)
-    .max(100)
+    .max(1000)
     .required()
     .messages({
       'string.empty': 'El nombre es requerido',
@@ -33,7 +33,7 @@ const rsvpValidationSchema = Joi.object({
 
   // Alergias del invitado principal
   alergias: Joi.string()
-    .max(500)
+    .max(5000)
     .allow('')
     .default('')
     .messages({
@@ -65,11 +65,11 @@ const rsvpValidationSchema = Joi.object({
           'string.max': 'El platillo no puede exceder 50 caracteres'
         }),
       alergias: Joi.string()
-        .max(500)
+        .max(5000)
         .allow('')
         .default('')
         .messages({
-          'string.max': 'La descripción de alergias del acompañante no puede exceder 500 caracteres'
+          'string.max': 'La descripción de alergias del acompañante no puede exceder 5000 caracteres'
         })
     })
   ).default([]),
