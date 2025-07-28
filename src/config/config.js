@@ -13,7 +13,7 @@ const config = {
       '*' : 
       (process.env.ALLOWED_ORIGINS ? 
         process.env.ALLOWED_ORIGINS.split(',') : 
-        ['http://localhost:3000', 'http://localhost:5173'])
+        ['http://localhost:3000', 'http://localhost:5173','https://rebecayenrique.blank.com.mx'])
   },
   rateLimit: {
     maxRequestsPerMinute: parseInt(process.env.MAX_REQUESTS_PER_MINUTE) || 10
